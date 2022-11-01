@@ -54,7 +54,7 @@ app.get(`/urls/:id`, (req, res) => {
 app.post("/urls", (req, res) => {
   let id = generateRandomString();
   urlDatabase[id] = req.body.longURL;
-  res.redirect(`/urls/${id}`); // Redirects to /urls/:(shortened ID)
+  res.redirect(`/urls/${id}`); // Redirects to /urls/(shortened ID)
 });
 
 app.get("/u/:id", (req, res) => {
