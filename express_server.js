@@ -1,10 +1,10 @@
 const generateRandomString = () => {
   let randomString = "";
-  let alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let alphaNumericLength = alphaNumeric.length;
 
   for (let i = 0; i < 6; i++) {
-    randomString += alphaNumeric.charAt(Math.floor(Math.random() * alphaNumericLength)); 
+    randomString += alphaNumeric.charAt(Math.floor(Math.random() * alphaNumericLength));
   }
   return randomString;
 };
@@ -60,4 +60,10 @@ app.post("/urls", (req, res) => {
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  let deletedId = req.params.id;
+  delete urlDatabase[deletedId];
+  res.redirect("/urls");
 });
