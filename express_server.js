@@ -67,3 +67,20 @@ app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[deletedId];
   res.redirect("/urls");
 });
+
+app.post("/urls/:id", (req, res) => {
+  let id = req.params.id;
+  let body = req.body;
+  let newLink = body.changeURL;
+
+  urlDatabase[id] = newLink;
+
+  res.redirect("/urls");
+});
+
+app.post("/urls/:id/edit", (req, res) => {
+  let id = req.params.id;
+
+  res.redirect(`/urls/${id}`);
+});
+
