@@ -30,6 +30,7 @@ const generateRandomString = () => {
   return randomString;
 };
 
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const app = express();
 const PORT = 8082; // default port 8082
@@ -160,7 +161,7 @@ app.post("/login", (req, res) => {
   
   for (let key in users) {
     if (getUserByEmail(req.body.email)) {
-      if (users[key].password === req.body.password) {
+      if (bcrypt.compareSync(req.body.password, users[key].password)) {
         res.cookie('user_id', users[key].id);
         res.redirect("/urls")
       } else {
@@ -187,7 +188,8 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   let email = req.body.email;
-  let password = req.body.password;
+  let preHashedPassword = req.body.password;
+  let password = bcrypt.hashSync(preHashedPassword, 10);
   
   if (!email || !password) {
     res.status(400).send("Please make sure you entered a valid email/password combination")
