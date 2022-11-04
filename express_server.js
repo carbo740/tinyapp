@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 const app = express();
 const PORT = 8082; // default port 8082
-const cookieParser = require('cookie-parser');
 
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -12,7 +11,7 @@ app.use(cookieSession({
   name: 'session',
   keys: ['CHARLES'],
   maxAge: 24 * 60 * 60 * 1000,
-})) ;
+}));
 
 const users = {};
 
@@ -53,7 +52,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const templateVars = {user: users[req.session.user_id]}
+  const templateVars = {user: users[req.session.user_id]};
   
   if (!templateVars.user) {
     res.redirect("/login");
@@ -63,12 +62,12 @@ app.get("/urls/new", (req, res) => {
 
 app.get(`/urls/:id`, (req, res) => {
   
-  if(urlDatabase[req.params.id]) {
+  if (urlDatabase[req.params.id]) {
     const templateVars = {
       user: users[req.session.user_id],
       longURL: urlDatabase[req.params.id].longURL,
       id: req.params.id,
-    }
+    };
     res.render("urls_show", templateVars);
   } else {
     res.status(400).send("Short URL not found in database");
@@ -88,17 +87,16 @@ app.post("/urls", (req, res) => {
 
 app.get("/u/:id", (req, res) => {
   
-    if (urlDatabase[req.params.id]) {
-      let redirectURL = urlDatabase[req.params.id].longURL;
-      if (redirectURL === undefined) {
-        res.status(300);
-      } else {
-        res.redirect(redirectURL);
-      }
+  if (urlDatabase[req.params.id]) {
+    let redirectURL = urlDatabase[req.params.id].longURL;
+    if (redirectURL === undefined) {
+      res.status(300);
     } else {
-      res.status(400).send("Failed to find short URL ID in the database");
+      res.redirect(redirectURL);
     }
-  
+  } else {
+    res.status(400).send("Failed to find short URL ID in the database");
+  }
 });
 
 app.post("/urls/:id/delete", (req, res) => {
@@ -113,8 +111,6 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/urls/:id", (req, res) => {
-
-  let userUrls = urlsForUser(req.session.user_id, urlDatabase);
 
   let body = req.body;
   let newLink = body.changeURL;
@@ -136,7 +132,7 @@ app.post("/login", (req, res) => {
     if (getUserByEmail(req.body.email, users)) {
       if (bcrypt.compareSync(req.body.password, users[key].password)) {
         req.session.user_id = users[key].id;
-        res.redirect("/urls")
+        res.redirect("/urls");
       } else {
         res.status(403).send("Please make sure you entered a valid email/password combination");
       }
@@ -165,9 +161,9 @@ app.post("/register", (req, res) => {
   let password = bcrypt.hashSync(preHashedPassword, 10);
   
   if (!email || !password) {
-    res.status(400).send("Please make sure you entered a valid email/password combination")
+    res.status(400).send("Please make sure you entered a valid email/password combination");
   } else if (getUserByEmail(req.body.email, users)) {
-    res.status(400).send("The email address is already registered in the system")
+    res.status(400).send("The email address is already registered in the system");
   } else {
     let userId = generateRandomString();
     
@@ -175,7 +171,7 @@ app.post("/register", (req, res) => {
       id: userId,
       email: email,
       password: password,
-    }
+    };
 
     req.session.user_id = userId;
   }
