@@ -20,12 +20,12 @@
   </div>
    <% if (user) { %>
     <form method="POST" action="/logout">
-      <h3>Logged In As : <%= user.email %></h3>
+      <label>Logged In : <%= user.email %></label>
       <button type="submit">Logout</button>
      </form>
    <% } else { %>
-        <p><a href="/register">Register </a></p>
-        <p><a href="/login">Login</a></p>
+        <label><a class="nav-item nav-link" href="/register">Register</a></label>
+        <label><a class="nav-item nav-link" href="/login">Login</a></label>
     <% } %>
 </nav>
 </header>

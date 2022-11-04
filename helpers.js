@@ -1,3 +1,4 @@
+// Gets USER details if matching email is found in database
 const getUserByEmail = (email, database) => {
   for (let key in database) {
     if (database[key].email === email) {
@@ -8,6 +9,7 @@ const getUserByEmail = (email, database) => {
   }
 };
 
+// Returns URLS from database for user with specific ID
 const urlsForUser = (id, database) => {
   let urls = {};
 
@@ -23,6 +25,7 @@ const urlsForUser = (id, database) => {
   }
 };
 
+// Returns a 6 character alpha numeric string
 const generateRandomString = () => {
   let randomString = "";
   let alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
